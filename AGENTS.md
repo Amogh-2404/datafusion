@@ -46,3 +46,11 @@ Repository-specific agent skills live under `.ai/skills/`. Each subdirectory is
 a single skill with a `SKILL.md` (YAML frontmatter + body). Check that
 directory for applicable skills before working on a task; new skills go in
 `.ai/skills/<skill-name>/SKILL.md`.
+
+## Cursor Cloud specific instructions
+
+- Rust is pinned by `rust-toolchain.toml` (1.95.0, with `rustfmt` and `clippy`). `protoc` 3.21 is installed as `protobuf-compiler`. Both are required to compile.
+- The `parquet-testing`, `testing`, and `datafusion-testing` git submodules are initialized by the environment install. Many integration tests and examples read that data.
+- The runnable application is `datafusion-cli`. The install builds `./target/debug/datafusion-cli`. Example: `./target/debug/datafusion-cli -c "SELECT * FROM 'datafusion-examples/data/csv/cars.csv' LIMIT 5;"`
+- There is no long-running service to start. The CLI exits after the command.
+- Memory is tight on this class of VM. Keep `CARGO_BUILD_JOBS` at 1 when `MemAvailable` is under about 5 GiB so `rustc` is not killed.
